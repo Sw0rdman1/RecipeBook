@@ -64,7 +64,9 @@ const App: React.FC = () => {
           {user ? (
             // User is logged in, show main screen
             <>
-              <Route exact path="/main" component={MainScreen} />
+              <Route exact path="/main">
+                <MainScreen handleUserUpdate={handleUserUpdate} user={user} />
+              </Route>
               <Redirect to="/main" />
             </>
           ) : (

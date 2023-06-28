@@ -16,7 +16,6 @@ import RegistrationNavbar from "../components/RegistrationNavBar";
 import { registerUser } from "../utillity/User.model";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase/compat/app";
-import { auth } from "../utillity/firebase";
 import LoadingScreen from "../components/LoadingScreen";
 
 interface RegistrationScreenProps {

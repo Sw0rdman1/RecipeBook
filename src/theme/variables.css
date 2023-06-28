@@ -2,6 +2,11 @@
 http://ionicframework.com/docs/theming/ */
 
 /** Ionic CSS Variables **/
+
+* {
+  font-family: "Rufina", serif;
+}
+
 :root {
   /** primary **/
   --ion-color-primary: #ea9226;
