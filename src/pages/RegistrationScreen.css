@@ -1,0 +1,62 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.registration-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 25px;
+  text-align: center;
+}
+
+.registration-container ion-input {
+  font-size: 18px;
+}
+
+.registration-container h1 {
+  font-size: 30px;
+  margin: 0;
+  margin-top: 30px;
+}
+
+.registration-container ion-button {
+  font-size: 20px;
+  height: 40px;
+  width: 60%;
+}
+
+.registration-container a {
+  font-size: 19px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.registration-link {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.custom-shape-divider-bottom-1687980186 {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.registration-container .custom-shape-divider-bottom-1687980186 svg {
+  position: relative;
+  display: block;
+  width: calc(125% + 1.3px);
+  height: 77px;
+  transform: rotateY(180deg);
+}
+
+.custom-shape-divider-bottom-1687980186 .shape-fill {
+  fill: #ea9226;
+}

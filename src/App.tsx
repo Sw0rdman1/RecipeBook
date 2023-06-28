@@ -5,7 +5,6 @@ import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import { auth } from "./utillity/firebase";
 import firebase from "firebase/compat/app";
 import Login from "./pages/LogInScreen";
-import Registration from "./pages/RegistrationScreen";
 import MainScreen from "./pages/MainScreen";
 
 /* Core CSS required for Ionic components to work properly */
@@ -26,12 +25,17 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import RegistrationScreen from "./pages/RegistrationScreen";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<any>(null); // State to track user authentication status
+  const [user, setUser] = useState<firebase.User | null>(null); // State to track user authentication status
   const [loading, setLoading] = useState(true);
+
+  const handleUserUpdate = (updatedUser: firebase.User | null) => {
+    setUser(updatedUser);
+  };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userAuth) => {
@@ -67,7 +71,9 @@ const App: React.FC = () => {
             // User is not logged in, show login and registration screens
             <>
               <Route exact path="/login" component={Login} />
-              <Route exact path="/registration" component={Registration} />
+              <Route exact path="/registration">
+                <RegistrationScreen handleUserUpdate={handleUserUpdate} />
+              </Route>
               <Redirect to="/login" />
             </>
           )}
