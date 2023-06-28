@@ -57,7 +57,7 @@ const LogInScreen: React.FC = () => {
             label=""
             placeholder="Email"
             value={email}
-            onIonChange={(e) => setEmail(e.detail.value!)}
+            onIonInput={(e: any) => setEmail(e.target.value)}
           ></IonInput>
         </IonItem>
         <IonItem>
@@ -68,7 +68,7 @@ const LogInScreen: React.FC = () => {
             type="password"
             value={password}
             className={shake ? "shake-animation" : ""}
-            onIonChange={(e) => setPassword(e.detail.value!)}
+            onIonInput={(e: any) => setPassword(e.target.value)}
           ></IonInput>
         </IonItem>
 

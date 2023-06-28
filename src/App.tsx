@@ -26,6 +26,7 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import RegistrationScreen from "./pages/RegistrationScreen";
+import LoadingScreen from "./components/LoadingScreen";
 
 setupIonicReact();
 
@@ -39,22 +40,24 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userAuth) => {
-      if (userAuth) {
-        // User is logged in
-        setUser(userAuth);
-        setLoading(false);
-      } else {
-        // User is not logged in
-        setUser(null);
-        setLoading(false);
-      }
+      setTimeout(() => {
+        if (userAuth) {
+          // User is logged in
+          setUser(userAuth);
+          setLoading(false);
+        } else {
+          // User is not logged in
+          setUser(null);
+          setLoading(false);
+        }
+      }, 500);
     });
 
     return () => unsubscribe();
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen />;
   }
 
   return (

@@ -87,7 +87,7 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
             type="text"
             placeholder="Name"
             value={name}
-            onIonChange={(e) => setName(e.detail.value!)}
+            onIonInput={(e: any) => setName(e.target.value)}
           />
         </IonItem>
         <IonItem>
@@ -97,7 +97,7 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
             type="email"
             placeholder="Email"
             value={email}
-            onIonChange={(e) => setEmail(e.detail.value!)}
+            onIonInput={(e: any) => setEmail(e.target.value)}
           ></IonInput>
         </IonItem>
         <IonItem>
@@ -107,7 +107,7 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
             type="password"
             placeholder="Password"
             value={password}
-            onIonChange={(e) => setPassword(e.detail.value!)}
+            onIonInput={(e: any) => setPassword(e.target.value)}
           ></IonInput>
         </IonItem>
         <IonButton expand="full" shape="round" onClick={handleRegistration}>

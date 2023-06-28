@@ -8,7 +8,7 @@
   align-items: center;
 }
 
-.sidebar-list ion-toolbar {
+.navbar-container ion-toolbar {
   --background: rgb(234, 146, 38, 0.9);
   --color: whitesmoke;
   border: none;
