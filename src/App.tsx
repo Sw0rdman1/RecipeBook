@@ -40,17 +40,16 @@ const App: React.FC = () => {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userAuth) => {
+      if (userAuth) {
+        // User is logged in
+        setUser(userAuth);
+      } else {
+        // User is not logged in
+        setUser(null);
+      }
       setTimeout(() => {
-        if (userAuth) {
-          // User is logged in
-          setUser(userAuth);
-          setLoading(false);
-        } else {
-          // User is not logged in
-          setUser(null);
-          setLoading(false);
-        }
-      }, 500);
+        setLoading(false);
+      }, 1000);
     });
 
     return () => unsubscribe();
