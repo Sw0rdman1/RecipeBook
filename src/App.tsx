@@ -66,9 +66,7 @@ const App: React.FC = () => {
           {user ? (
             // User is logged in, show main screen
             <>
-              <Route exact path="/main">
-                <MainScreen handleUserUpdate={handleUserUpdate} user={user} />
-              </Route>
+              <MainScreen handleUserUpdate={handleUserUpdate} user={user} />
               <Redirect to="/main" />
             </>
           ) : (
@@ -86,4 +84,5 @@ const App: React.FC = () => {
     </IonApp>
   );
 };
+
 export default App;

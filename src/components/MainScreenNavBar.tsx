@@ -10,11 +10,11 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-interface MainScreenProps {
+interface MainScreenNavBarProps {
   user: firebase.User | null;
 }
 
-const NavBar: React.FC<MainScreenProps> = ({ user }) => {
+const MainScreenNavBar: React.FC<MainScreenNavBarProps> = ({ user }) => {
   return (
     <IonHeader className="navbar-container">
       <IonToolbar className="navbar-toolbar">
@@ -44,4 +44,4 @@ const NavBar: React.FC<MainScreenProps> = ({ user }) => {
   );
 };
 
-export default NavBar;
+export default MainScreenNavBar;

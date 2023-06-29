@@ -10,18 +10,15 @@ import {
 } from "@ionic/react";
 import firebase from "firebase/compat/app";
 import "./SideMenu.css";
+import { useHistory } from "react-router";
+import MainScreenNavBar from "./MainScreenNavBar";
 
 interface SideMenuProps {
   handleLogout: () => void;
   user: firebase.User | null;
-  setMainContent: (number: number) => void;
 }
 
-const SideMenu: React.FC<SideMenuProps> = ({
-  handleLogout,
-  user,
-  setMainContent,
-}) => {
+const SideMenu: React.FC<SideMenuProps> = ({ handleLogout, user }) => {
   return (
     <IonMenu type="overlay" contentId="main-content" side="end">
       <IonContent>
@@ -41,26 +38,26 @@ const SideMenu: React.FC<SideMenuProps> = ({
           <h3>{user?.email}</h3>
           <IonList className="sidebar-list">
             <IonMenuToggle>
-              <IonItem onClick={() => setMainContent(0)}>
+              <IonItem routerLink="/main/home">
                 <IonLabel>Home Screen</IonLabel>
               </IonItem>
             </IonMenuToggle>
 
             <IonMenuToggle>
-              <IonItem onClick={() => setMainContent(1)}>
+              <IonItem routerLink="/main/create-recipe">
                 <IonLabel>Create New Recipe</IonLabel>
               </IonItem>
             </IonMenuToggle>
 
             <IonMenuToggle>
-              <IonItem onClick={() => setMainContent(2)}>
-                <IonLabel>Your Profile</IonLabel>
+              <IonItem routerLink="/main/liked-recipe">
+                <IonLabel>Liked Recipes</IonLabel>
               </IonItem>
             </IonMenuToggle>
 
             <IonMenuToggle>
-              <IonItem onClick={() => setMainContent(3)}>
-                <IonLabel>Saved Recipes</IonLabel>
+              <IonItem routerLink="/main/profile">
+                <IonLabel>Your Profile</IonLabel>
               </IonItem>
             </IonMenuToggle>
 
