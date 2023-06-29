@@ -1,7 +1,8 @@
+import { IonContent } from "@ionic/react";
 import React from "react";
 
 const ProfileScreen: React.FC = () => {
-  return <div>ProfileScreen</div>;
+  return <IonContent>ProfileScreen</IonContent>;
 };
 
 export default ProfileScreen;

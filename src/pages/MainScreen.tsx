@@ -1,30 +1,14 @@
 import React, { useState } from "react";
-import {
-  IonContent,
-  IonButton,
-  IonPage,
-  IonRouterOutlet,
-  IonSplitPane,
-  IonHeader,
-} from "@ionic/react";
+import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import { auth } from "../utillity/firebase";
 import firebase from "firebase/compat/app";
-import {
-  Redirect,
-  Route,
-  Switch,
-  useHistory,
-  useRouteMatch,
-} from "react-router";
+import { Redirect, Route, useHistory, useRouteMatch } from "react-router";
 import SideMenu from "../components/SideMenu";
 import NavBar from "../components/MainScreenNavBar";
-import HomeScreen from "./HomeScree";
-import LikedRecipesScreen from "./LikedRecipesScreen";
-import CreateRecipeScreen from "./CreateRecipeScreen";
-import ProfileScreen from "./ProfileScreen";
-import { IonReactRouter } from "@ionic/react-router";
-import { BrowserRouter } from "react-router-dom";
-import MainScreenRouting from "../components/MainScreenRouting";
+import HomeScreen from "./mainScreen/HomeScree";
+import LikedRecipesScreen from "./mainScreen/LikedRecipesScreen";
+import CreateRecipeScreen from "./mainScreen/CreateRecipeScreen";
+import ProfileScreen from "./mainScreen/ProfileScreen";
 
 interface MainScreenProps {
   handleUserUpdate: (updatedUser: firebase.User | null) => void;
@@ -67,6 +51,7 @@ const MainScreen: React.FC<MainScreenProps> = ({ handleUserUpdate, user }) => {
             component={CreateRecipeScreen}
           />
           <Route exact path="/main/profile" component={ProfileScreen} />
+          <Redirect from="/main" to="/main/home" exact />
         </IonRouterOutlet>
       </IonContent>
     </IonPage>

@@ -10,8 +10,6 @@ import {
 } from "@ionic/react";
 import firebase from "firebase/compat/app";
 import "./SideMenu.css";
-import { useHistory } from "react-router";
-import MainScreenNavBar from "./MainScreenNavBar";
 
 interface SideMenuProps {
   handleLogout: () => void;
@@ -50,7 +48,7 @@ const SideMenu: React.FC<SideMenuProps> = ({ handleLogout, user }) => {
             </IonMenuToggle>
 
             <IonMenuToggle>
-              <IonItem routerLink="/main/liked-recipe">
+              <IonItem routerLink="/main/liked-recipes">
                 <IonLabel>Liked Recipes</IonLabel>
               </IonItem>
             </IonMenuToggle>
