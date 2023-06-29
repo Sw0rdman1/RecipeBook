@@ -63,7 +63,7 @@
 
 .sidebar-list {
   width: 100%;
-  margin-top: 70px;
+  margin-top: 50px;
 }
 
 .sidebar-list ion-item {
@@ -72,7 +72,7 @@
 
 .item.sc-ion-label-ios-h,
 .item .sc-ion-label-ios-h {
-  font-size: px !important;
+  font-size: 18px !important;
   font-weight: 500;
   text-align: center;
   font-family: "Rufina", serif;

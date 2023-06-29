@@ -1,0 +1,40 @@
+.create-recipe-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.create-recipe-container ion-input {
+  width: 70%;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+.create-recipe-container ion-textarea {
+  width: 70%;
+  border: none;
+  border-bottom: 1px solid gray;
+}
+
+.create-recipe-container h1 {
+  font-size: 28px;
+}
+
+.create-recipe-container ion-button {
+  width: 50%;
+  margin-top: 10px;
+  height: 45px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.create-recipe-container .custom-shape-divider-bottom-1687980186 svg {
+  position: relative;
+  display: block;
+  width: calc(125% + 1.3px);
+  height: 57px;
+  transform: rotateY(180deg);
+}
