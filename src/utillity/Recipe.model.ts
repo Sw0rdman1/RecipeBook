@@ -200,7 +200,7 @@ export const fetchMyRecipes = async (): Promise<Recipe[]> => {
 
     const querySnapshot = await firestore
       .collection("recipes")
-      .where("createdBy", "==", currentUser.uid)
+      .where("creatorID", "==", currentUser.uid)
       .get();
 
     const recipePromises = querySnapshot.docs.map(async (doc) => {
@@ -211,7 +211,7 @@ export const fetchMyRecipes = async (): Promise<Recipe[]> => {
         .get();
       const likesCount = likesSnapshot.size;
       const likedByUser = likesSnapshot.docs.some(
-        (doc) => doc.data().userID === currentUser.uid
+        (doc) => doc.data().creatorID === currentUser.uid
       );
       return {
         ...recipeData,

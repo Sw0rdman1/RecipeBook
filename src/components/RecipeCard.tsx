@@ -14,12 +14,12 @@ import "./RecipeCard.css";
 
 interface RecipeCardProps {
   recipe: Recipe;
-  likeOrUnlikeRecipe: (recipe: Recipe) => void;
+  likeOrDislikeRecipe: (recipe: Recipe) => void;
 }
 
 const RecipeCard: React.FC<RecipeCardProps> = ({
   recipe,
-  likeOrUnlikeRecipe,
+  likeOrDislikeRecipe,
 }) => {
   const [isLiked, setIsLiked] = useState(recipe.likedByUser);
 
@@ -27,13 +27,15 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     setIsLiked(!isLiked);
     isLiked ? recipe.likes-- : recipe.likes++;
 
-    likeOrUnlikeRecipe(recipe);
+    likeOrDislikeRecipe(recipe);
   };
 
   return (
     <IonCard className="recipe-card">
       <IonCardHeader className="card-header">
-        <IonCardSubtitle className="recipe-subtitle">- Boza</IonCardSubtitle>
+        <IonCardSubtitle className="recipe-subtitle">
+          - {recipe.creatorName}
+        </IonCardSubtitle>
         <IonCardTitle>
           <div className="title-container">
             {recipe.title}

@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   flex-direction: column;
-  gap: 30px;
+  gap: 25px;
   margin-top: 20px;
 }
 
@@ -28,4 +28,60 @@
 
 .liked-recipes-header span {
   font-size: 16px;
+}
+
+/* MY PROFILE */
+
+.my-profile-screen {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.my-prfoile-section {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+  background: rgb(237, 139, 19, 0.2);
+}
+
+.my-profile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.my-profile-text h2 {
+  margin: 0;
+  padding: 0;
+  font-weight: bold;
+}
+
+.my-profile-text h3 {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+.my-recipe-section h4 {
+  margin: 0;
+  font-weight: 400;
+  font-size: 18px;
+}
+
+.my-recipe-header {
+  background: rgb(237, 139, 19, 0.7);
+  color: white;
+  padding: 5px 10px;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 20px;
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
 }

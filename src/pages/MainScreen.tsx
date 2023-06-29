@@ -8,7 +8,7 @@ import NavBar from "../components/MainScreenNavBar";
 import HomeScreen from "./mainScreen/HomeScreen";
 import LikedRecipesScreen from "./mainScreen/LikedRecipesScreen";
 import CreateRecipeScreen from "./mainScreen/CreateRecipeScreen";
-import ProfileScreen from "./mainScreen/ProfileScreen";
+import ProfileScreen from "./mainScreen/MyProfileScreen";
 import "./MainScreen.css";
 
 interface MainScreenProps {

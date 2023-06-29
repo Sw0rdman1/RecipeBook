@@ -26,7 +26,7 @@ const HomeScreen: React.FC = () => {
           <RecipeCard
             recipe={recipe}
             key={recipe.id}
-            likeOrUnlikeRecipe={likeOrDislikeRecipe}
+            likeOrDislikeRecipe={likeOrDislikeRecipe}
           />
         ))}
       </div>
