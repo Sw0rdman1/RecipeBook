@@ -4,13 +4,13 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
-  IonCardContent,
   IonButton,
   IonIcon,
 } from "@ionic/react";
 import { heart, heartOutline } from "ionicons/icons";
 import { Recipe } from "../utillity/Recipe.model";
 import "./RecipeCard.css";
+import { useHistory } from "react-router";
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -22,16 +22,27 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   likeOrDislikeRecipe,
 }) => {
   const [isLiked, setIsLiked] = useState(recipe.likedByUser);
+  const history = useHistory();
 
-  const handleLikeClick = () => {
+  const handleLikeClick = (
+    e: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
+
     setIsLiked(!isLiked);
     isLiked ? recipe.likes-- : recipe.likes++;
+    console.log(recipe.likedByUser);
 
     likeOrDislikeRecipe(recipe);
+    recipe.likedByUser = !recipe.likedByUser;
+  };
+
+  const handleRecipeClick = () => {
+    history.push(`/main/recipe-details/${recipe.id}`);
   };
 
   return (
-    <IonCard className="recipe-card">
+    <IonCard className="recipe-card" onClick={handleRecipeClick}>
       <IonCardHeader className="card-header">
         <IonCardSubtitle className="recipe-subtitle">
           - {recipe.creatorName}
@@ -42,10 +53,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
             <div className="like-container">
               <span>{recipe.likes}</span>
               <IonButton fill="clear" onClick={handleLikeClick}>
-                <IonIcon
-                  onClick={handleLikeClick}
-                  icon={isLiked ? heart : heartOutline}
-                />
+                <IonIcon icon={isLiked ? heart : heartOutline} />
               </IonButton>
             </div>
           </div>

@@ -85,3 +85,86 @@
   color: white;
   font-weight: bold;
 }
+
+/* FULL RECIPE */
+
+.full-recipe-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.full-recipe-container h1 {
+  color: rgb(237, 139, 19);
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.full-recipe-container h3 {
+  margin: 10px;
+  font-size: 21px;
+}
+
+.ingredients-list {
+  text-align: start;
+  padding-left: 45px;
+}
+
+.ingredients-list p {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 10px;
+  color: rgb(237, 139, 19, 0.8);
+}
+
+ul li::marker {
+  font-size: 14px;
+}
+
+ul li {
+  margin-left: 10px;
+  list-style-type: "✔️";
+  padding-left: 10px;
+  font-size: 18px;
+}
+
+.instructions-list {
+  text-align: start;
+  padding-left: 45px;
+}
+
+.instructions-list p {
+  color: rgb(237, 139, 19, 0.8);
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
+
+ol li {
+  margin-left: 10px;
+  padding-left: 10px;
+  font-size: 18px;
+}
+.buttons {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+.full-recipe-container ion-button {
+  font-size: 16px;
+  height: 45px;
+}
+
+.delete-button {
+  width: 40%;
+}
+
+.like-button {
+  width: 40%;
+}

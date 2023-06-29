@@ -9,6 +9,7 @@ export const createRecipe = async (
   description: string,
   ingredients: string,
   instructions: string,
+  recipePicture: File | undefined,
   user: firebase.User
 ) => {
   try {
@@ -21,6 +22,16 @@ export const createRecipe = async (
     // Get the current timestamp
     const timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
+    let downloadURL = "";
+
+    if (recipePicture) {
+      const storageRef = firebase.storage().ref();
+      const profilePictureRef = storageRef.child(`recipePictures/${recipeId}`);
+      await profilePictureRef.put(recipePicture);
+
+      // Get the download URL of the uploaded image
+      downloadURL = await profilePictureRef.getDownloadURL();
+    }
     // Create the recipe object with the provided data
     const recipe = {
       id: recipeId,
@@ -28,6 +39,7 @@ export const createRecipe = async (
       description,
       ingredients,
       instructions,
+      photoURL: downloadURL,
       creatorID: user.uid,
       creatorName: user.displayName,
       createdAt: timestamp,
@@ -48,6 +60,7 @@ export interface Recipe {
   description: string;
   ingredients: string;
   instructions: string;
+  photoURL: string;
   likes: number;
   likedByUser: boolean;
   creatorID: string;
@@ -68,6 +81,7 @@ export const fetchAllRecipes = async (): Promise<Recipe[]> => {
         .get();
       const likes = likesSnapshot.docs.length;
       const currentUser = auth.currentUser;
+
       const likedByUser = currentUser
         ? likesSnapshot.docs.some(
             (likeDoc) => likeDoc.data().userID === currentUser.uid
@@ -173,7 +187,6 @@ export const fetchLikedRecipes = async (): Promise<Recipe[]> => {
         (doc) => doc.data().userID === currentUser.uid
       );
       const recipeData = recipeSnapshot.data() as Recipe;
-      console.log(recipeData);
 
       return {
         ...recipeData,
@@ -225,6 +238,44 @@ export const fetchMyRecipes = async (): Promise<Recipe[]> => {
     return myRecipes;
   } catch (error) {
     console.error("Error fetching my recipes:", error);
+    throw error;
+  }
+};
+
+export const getRecipeDetails = async (
+  recipeId: string
+): Promise<Recipe | null> => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("User is not logged in.");
+    }
+
+    const recipeRef = firestore.collection("recipes").doc(recipeId);
+    const recipeSnapshot = await recipeRef.get();
+
+    if (!recipeSnapshot.exists) {
+      return null; // Recipe not found
+    }
+
+    const recipeData = recipeSnapshot.data() as Recipe;
+    const likesSnapshot = await firestore
+      .collection("likes")
+      .where("recipeID", "==", recipeId)
+      .get();
+
+    const likesCount = likesSnapshot.size;
+    const likedByUser = likesSnapshot.docs.some(
+      (doc) => doc.data().userID === currentUser.uid
+    );
+
+    return {
+      ...recipeData,
+      likes: likesCount,
+      likedByUser: likedByUser,
+    };
+  } catch (error) {
+    console.error("Error fetching recipe details:", error);
     throw error;
   }
 };

@@ -9,7 +9,7 @@ import {
 import { arrowBackOutline } from "ionicons/icons";
 import { useHistory } from "react-router-dom";
 
-const RegistrationNavbar: React.FC = () => {
+const RecipeDeatilsNavbar: React.FC = () => {
   const history = useHistory();
 
   const handleBackClick = () => {
@@ -20,12 +20,11 @@ const RegistrationNavbar: React.FC = () => {
       <IonButtons slot="start">
         <IonButton onClick={handleBackClick}>
           <IonIcon slot="icon-only" icon={arrowBackOutline} />
-          Log In
+          Back
         </IonButton>
       </IonButtons>
-      <IonTitle className="ion-text-center">Registration</IonTitle>
     </IonToolbar>
   );
 };
 
-export default RegistrationNavbar;
+export default RecipeDeatilsNavbar;

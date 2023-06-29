@@ -10,6 +10,7 @@ import LikedRecipesScreen from "./mainScreen/LikedRecipesScreen";
 import CreateRecipeScreen from "./mainScreen/CreateRecipeScreen";
 import ProfileScreen from "./mainScreen/MyProfileScreen";
 import "./MainScreen.css";
+import RecipeDetailsScreen from "./mainScreen/RecipeDetailsScreen";
 
 interface MainScreenProps {
   handleUserUpdate: (updatedUser: firebase.User | null) => void;
@@ -51,6 +52,10 @@ const MainScreen: React.FC<MainScreenProps> = ({ handleUserUpdate, user }) => {
             component={CreateRecipeScreen}
           />
           <Route exact path="/main/profile" component={ProfileScreen} />
+          <Route
+            path="/main/recipe-details/:recipeId"
+            component={RecipeDetailsScreen}
+          />
           <Redirect from="/main" to="/main/home" exact />
         </IonRouterOutlet>
       </IonContent>
