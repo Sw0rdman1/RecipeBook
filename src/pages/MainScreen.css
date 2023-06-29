@@ -7,3 +7,25 @@
   gap: 30px;
   margin-top: 20px;
 }
+
+/* LIKED RECIPES */
+
+.liked-recipes-screen {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.liked-recipes-header {
+  background: rgb(234, 146, 38, 0.3);
+  padding: 10px 5%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+
+.liked-recipes-header span {
+  font-size: 16px;
+}

@@ -29,8 +29,8 @@ export const createRecipe = async (
       ingredients,
       instructions,
       creatorID: user.uid,
-      createdAt: timestamp,
       creatorName: user.displayName,
+      createdAt: timestamp,
     };
 
     // Add the recipe to the "recipes" collection
@@ -50,6 +50,8 @@ export interface Recipe {
   instructions: string;
   likes: number;
   likedByUser: boolean;
+  creatorID: string;
+  creatorName: string;
 }
 
 export const fetchAllRecipes = async (): Promise<Recipe[]> => {
@@ -143,7 +145,7 @@ export const likeOrDislikeRecipe = (recipe: Recipe) => {
   }
 };
 
-export const getLikedRecipes = async (): Promise<Recipe[]> => {
+export const fetchLikedRecipes = async (): Promise<Recipe[]> => {
   try {
     const currentUser = auth.currentUser;
     if (!currentUser) {
@@ -157,19 +159,72 @@ export const getLikedRecipes = async (): Promise<Recipe[]> => {
 
     const likedRecipeIDs = querySnapshot.docs.map((doc) => doc.data().recipeID);
 
-    const recipePromises = likedRecipeIDs.map((recipeID) =>
-      firestore.collection("recipes").doc(recipeID).get()
-    );
+    const recipePromises = likedRecipeIDs.map(async (recipeID) => {
+      const recipeSnapshot = await firestore
+        .collection("recipes")
+        .doc(recipeID)
+        .get();
+      const likesSnapshot = await firestore
+        .collection("likes")
+        .where("recipeID", "==", recipeID)
+        .get();
+      const likesCount = likesSnapshot.size;
+      const likedByUser = likesSnapshot.docs.some(
+        (doc) => doc.data().userID === currentUser.uid
+      );
+      const recipeData = recipeSnapshot.data() as Recipe;
+      console.log(recipeData);
 
-    const recipeSnapshots = await Promise.all(recipePromises);
+      return {
+        ...recipeData,
+        likes: likesCount,
+        likedByUser: likedByUser,
+      };
+    });
 
-    const likedRecipes: Recipe[] = recipeSnapshots.map(
-      (snapshot) => snapshot.data() as Recipe
-    );
+    const likedRecipes = await Promise.all(recipePromises);
 
     return likedRecipes;
   } catch (error) {
     console.error("Error fetching liked recipes:", error);
+    throw error;
+  }
+};
+
+export const fetchMyRecipes = async (): Promise<Recipe[]> => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("User is not logged in.");
+    }
+
+    const querySnapshot = await firestore
+      .collection("recipes")
+      .where("createdBy", "==", currentUser.uid)
+      .get();
+
+    const recipePromises = querySnapshot.docs.map(async (doc) => {
+      const recipeData = doc.data() as Recipe;
+      const likesSnapshot = await firestore
+        .collection("likes")
+        .where("recipeID", "==", doc.id)
+        .get();
+      const likesCount = likesSnapshot.size;
+      const likedByUser = likesSnapshot.docs.some(
+        (doc) => doc.data().userID === currentUser.uid
+      );
+      return {
+        ...recipeData,
+        likes: likesCount,
+        likedByUser: likedByUser,
+      };
+    });
+
+    const myRecipes = await Promise.all(recipePromises);
+
+    return myRecipes;
+  } catch (error) {
+    console.error("Error fetching my recipes:", error);
     throw error;
   }
 };

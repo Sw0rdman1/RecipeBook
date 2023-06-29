@@ -21,16 +21,19 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
   recipe,
   likeOrUnlikeRecipe,
 }) => {
+  const [isLiked, setIsLiked] = useState(recipe.likedByUser);
+
   const handleLikeClick = () => {
+    setIsLiked(!isLiked);
+    isLiked ? recipe.likes-- : recipe.likes++;
+
     likeOrUnlikeRecipe(recipe);
-    recipe.likedByUser ? recipe.likes-- : recipe.likes++;
-    recipe.likedByUser = !recipe.likedByUser;
   };
 
   return (
     <IonCard className="recipe-card">
       <IonCardHeader className="card-header">
-        <IonCardSubtitle className="recipe-subtitle">- Bosko</IonCardSubtitle>
+        <IonCardSubtitle className="recipe-subtitle">- Boza</IonCardSubtitle>
         <IonCardTitle>
           <div className="title-container">
             {recipe.title}
@@ -39,7 +42,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
               <IonButton fill="clear" onClick={handleLikeClick}>
                 <IonIcon
                   onClick={handleLikeClick}
-                  icon={recipe.likedByUser ? heart : heartOutline}
+                  icon={isLiked ? heart : heartOutline}
                 />
               </IonButton>
             </div>
