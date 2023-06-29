@@ -1,0 +1,9 @@
+/* HOME PAGE */
+
+.home-screen {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 30px;
+  margin-top: 20px;
+}

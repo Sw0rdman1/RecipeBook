@@ -63,13 +63,13 @@ export const registerUser = async (
   }
 };
 
-export const getCurrentUserID = (): string => {
+export const getCurrentUser = (): firebase.User | null => {
   const user = firebase.auth().currentUser;
   if (!user) {
     // User is not logged in, handle accordingly
-    return "User not logged";
+    return null;
   }
 
   // Get the user ID
-  return user.uid;
+  return user;
 };

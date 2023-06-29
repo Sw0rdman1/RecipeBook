@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
 import { auth } from "../utillity/firebase";
 import firebase from "firebase/compat/app";
 import { Redirect, Route, useHistory, useRouteMatch } from "react-router";
 import SideMenu from "../components/SideMenu";
 import NavBar from "../components/MainScreenNavBar";
-import HomeScreen from "./mainScreen/HomeScree";
+import HomeScreen from "./mainScreen/HomeScreen";
 import LikedRecipesScreen from "./mainScreen/LikedRecipesScreen";
 import CreateRecipeScreen from "./mainScreen/CreateRecipeScreen";
 import ProfileScreen from "./mainScreen/ProfileScreen";
+import "./MainScreen.css";
 
 interface MainScreenProps {
   handleUserUpdate: (updatedUser: firebase.User | null) => void;
@@ -17,7 +18,6 @@ interface MainScreenProps {
 
 const MainScreen: React.FC<MainScreenProps> = ({ handleUserUpdate, user }) => {
   const history = useHistory();
-  const match = useRouteMatch();
 
   const handleLogout = async () => {
     try {

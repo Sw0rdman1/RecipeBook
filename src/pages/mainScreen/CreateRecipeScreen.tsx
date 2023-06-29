@@ -9,7 +9,7 @@ import {
 } from "@ionic/react";
 import "./CreateRecipeScreen.css";
 import { createRecipe } from "../../utillity/Recipe.model";
-import { getCurrentUserID } from "../../utillity/User.model";
+import { getCurrentUser } from "../../utillity/User.model";
 
 const CreateRecipeScreen: React.FC = () => {
   const [title, setTitle] = useState("");
@@ -29,9 +29,9 @@ const CreateRecipeScreen: React.FC = () => {
       return;
     }
 
-    const userID = getCurrentUserID();
+    const userID = getCurrentUser();
 
-    if (userID === "User not logged") {
+    if (!userID) {
       return;
     }
 
