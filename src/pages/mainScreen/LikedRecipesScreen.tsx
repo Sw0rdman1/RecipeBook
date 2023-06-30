@@ -6,18 +6,26 @@ import {
   likeOrDislikeRecipe,
 } from "../../utillity/Recipe.model";
 import RecipeCard from "../../components/RecipeCard";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const LikedRecipesScreen: React.FC = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>();
 
   useEffect(() => {
     const fetchRecipes = async () => {
       const fetchedRecipes = await fetchLikedRecipes();
-      setRecipes(fetchedRecipes);
+      setTimeout(() => {
+        setRecipes(fetchedRecipes);
+      }, 250);
     };
 
     fetchRecipes();
   }, []);
+
+  if (!recipes) {
+    return <LoadingScreen />;
+  }
+
   return (
     <IonContent>
       <div className="liked-recipes-screen">

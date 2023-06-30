@@ -6,18 +6,25 @@ import {
 } from "../../utillity/Recipe.model";
 import RecipeCard from "../../components/RecipeCard";
 import { IonContent } from "@ionic/react";
+import LoadingScreen from "../../components/LoadingScreen";
 
 const HomeScreen: React.FC = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [recipes, setRecipes] = useState<Recipe[]>();
 
   useEffect(() => {
     const fetchRecipes = async () => {
       const fetchedRecipes = await fetchAllRecipes();
-      setRecipes(fetchedRecipes);
+      setTimeout(() => {
+        setRecipes(fetchedRecipes);
+      }, 250);
     };
 
     fetchRecipes();
   }, []);
+
+  if (!recipes) {
+    return <LoadingScreen />;
+  }
 
   return (
     <IonContent>
