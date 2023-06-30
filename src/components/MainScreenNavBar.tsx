@@ -19,7 +19,7 @@ const MainScreenNavBar: React.FC<MainScreenNavBarProps> = ({ user }) => {
     <IonHeader className="navbar-container">
       <IonToolbar className="navbar-toolbar">
         <IonText slot="start" className="navbar-title">
-          RecipeBook
+          RecipeBook 🍳
         </IonText>
 
         <IonButtons slot="end" className="navbar-profile">
