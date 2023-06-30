@@ -69,7 +69,9 @@ export interface Recipe {
 
 export const fetchAllRecipes = async (): Promise<Recipe[]> => {
   try {
-    const recipesRef = firestore.collection("recipes");
+    const recipesRef = firestore
+      .collection("recipes")
+      .orderBy("createdAt", "desc");
     const snapshot = await recipesRef.get();
     const fetchedRecipes: Recipe[] = [];
 
@@ -102,60 +104,6 @@ export const fetchAllRecipes = async (): Promise<Recipe[]> => {
   } catch (error) {
     console.error("Error fetching recipes:", error);
     return [];
-  }
-};
-
-const likeRecipe = async (recipeID: string): Promise<void> => {
-  try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("User is not logged in.");
-    }
-
-    const like: Like = {
-      userID: currentUser.uid,
-      recipeID,
-    };
-
-    await firestore.collection("likes").add(like);
-  } catch (error) {
-    console.error("Error liking recipe:", error);
-    throw error;
-  }
-};
-
-const dislikeRecipe = async (recipeID: string): Promise<void> => {
-  try {
-    const currentUser = auth.currentUser;
-    if (!currentUser) {
-      throw new Error("User is not logged in.");
-    }
-
-    const likesSnapshot = await firestore
-      .collection("likes")
-      .where("recipeID", "==", recipeID)
-      .where("userID", "==", currentUser.uid)
-      .get();
-
-    const likeDocs = likesSnapshot.docs;
-
-    if (likeDocs.length === 0) {
-      throw new Error("User has not liked the recipe.");
-    }
-
-    const likeDoc = likeDocs[0];
-    await firestore.collection("likes").doc(likeDoc.id).delete();
-  } catch (error) {
-    console.error("Error unliking recipe:", error);
-    throw error;
-  }
-};
-
-export const likeOrDislikeRecipe = (recipe: Recipe) => {
-  if (recipe.likedByUser) {
-    dislikeRecipe(recipe.id);
-  } else {
-    likeRecipe(recipe.id);
   }
 };
 
@@ -213,6 +161,7 @@ export const fetchMyRecipes = async (): Promise<Recipe[]> => {
 
     const querySnapshot = await firestore
       .collection("recipes")
+      .orderBy("createdAt", "desc")
       .where("creatorID", "==", currentUser.uid)
       .get();
 
@@ -224,7 +173,7 @@ export const fetchMyRecipes = async (): Promise<Recipe[]> => {
         .get();
       const likesCount = likesSnapshot.size;
       const likedByUser = likesSnapshot.docs.some(
-        (doc) => doc.data().creatorID === currentUser.uid
+        (doc) => doc.data().userID === currentUser.uid
       );
       return {
         ...recipeData,
@@ -276,6 +225,78 @@ export const getRecipeDetails = async (
     };
   } catch (error) {
     console.error("Error fetching recipe details:", error);
+    throw error;
+  }
+};
+
+const likeRecipe = async (recipeID: string): Promise<void> => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("User is not logged in.");
+    }
+
+    const like: Like = {
+      userID: currentUser.uid,
+      recipeID,
+    };
+
+    await firestore.collection("likes").add(like);
+  } catch (error) {
+    console.error("Error liking recipe:", error);
+    throw error;
+  }
+};
+
+const dislikeRecipe = async (recipeID: string): Promise<void> => {
+  try {
+    const currentUser = auth.currentUser;
+    if (!currentUser) {
+      throw new Error("User is not logged in.");
+    }
+
+    const likesSnapshot = await firestore
+      .collection("likes")
+      .where("recipeID", "==", recipeID)
+      .where("userID", "==", currentUser.uid)
+      .get();
+
+    const likeDocs = likesSnapshot.docs;
+
+    if (likeDocs.length === 0) {
+      throw new Error("User has not liked the recipe.");
+    }
+
+    const likeDoc = likeDocs[0];
+    await firestore.collection("likes").doc(likeDoc.id).delete();
+  } catch (error) {
+    console.error("Error unliking recipe:", error);
+    throw error;
+  }
+};
+
+export const likeOrDislikeRecipe = (recipe: Recipe) => {
+  if (recipe.likedByUser) {
+    dislikeRecipe(recipe.id);
+  } else {
+    likeRecipe(recipe.id);
+  }
+};
+
+export const deleteRecipe = async (recipeId: string): Promise<void> => {
+  try {
+    await firestore.collection("recipes").doc(recipeId).delete();
+    await firestore
+      .collection("likes")
+      .where("recipeID", "==", recipeId)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          doc.ref.delete();
+        });
+      });
+  } catch (error) {
+    console.error("Error deleting recipe:", error);
     throw error;
   }
 };

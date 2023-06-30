@@ -31,7 +31,6 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
 
     setIsLiked(!isLiked);
     isLiked ? recipe.likes-- : recipe.likes++;
-    console.log(recipe.likedByUser);
 
     likeOrDislikeRecipe(recipe);
     recipe.likedByUser = !recipe.likedByUser;
