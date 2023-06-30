@@ -31,8 +31,6 @@ const LogInScreen: React.FC = () => {
   };
 
   const handleBadLogin = (error: any) => {
-    console.log(error);
-
     if (error.code === "auth/user-not-found") {
       setToastMessage("User does not exist.");
     } else if (error.code === "auth/wrong-password") {

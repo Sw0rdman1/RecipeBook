@@ -74,12 +74,9 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
   useEffect(() => {
     const fetchRecipeDetails = async () => {
       try {
-        console.log(recipeId);
-
         const recipeDetails = await getRecipeDetails(recipeId);
         setTimeout(() => {
           setRecipe(recipeDetails);
-          console.log(recipeDetails);
 
           setIsLiked(recipeDetails?.likedByUser);
         }, 250);
