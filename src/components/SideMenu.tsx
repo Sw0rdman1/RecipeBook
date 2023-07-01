@@ -10,10 +10,11 @@ import {
 } from "@ionic/react";
 import firebase from "firebase/compat/app";
 import "./SideMenu.css";
+import { User } from "../models/User.model";
 
 interface SideMenuProps {
   handleLogout: () => void;
-  user: firebase.User | null;
+  user: User | null;
 }
 
 const SideMenu: React.FC<SideMenuProps> = ({ handleLogout, user }) => {

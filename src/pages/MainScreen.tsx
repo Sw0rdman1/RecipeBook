@@ -11,10 +11,11 @@ import CreateRecipeScreen from "./mainScreen/CreateRecipeScreen";
 import ProfileScreen from "./mainScreen/MyProfileScreen";
 import "./MainScreen.css";
 import RecipeDetailsScreen from "./mainScreen/RecipeDetailsScreen";
+import { User } from "../models/User.model";
 
 interface MainScreenProps {
-  handleUserUpdate: (updatedUser: firebase.User | null) => void;
-  user: firebase.User | null;
+  handleUserUpdate: (updatedUser: User | null) => void;
+  user: User | null;
 }
 
 const MainScreen: React.FC<MainScreenProps> = ({ handleUserUpdate, user }) => {

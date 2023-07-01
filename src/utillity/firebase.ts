@@ -7,12 +7,12 @@ import "firebase/compat/storage";
 
 // Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC3dCdz1z4gLwcpwbR14gmBQegOazbDTSk",
-  authDomain: "recipebook-2535b.firebaseapp.com",
-  projectId: "recipebook-2535b",
-  storageBucket: "recipebook-2535b.appspot.com",
-  messagingSenderId: "1081383699938",
-  appId: "1:1081383699938:web:1c4c6d146e34aa7d35a5bb",
+  apiKey: "AIzaSyDiNSVs2ehjmzQn0b8d_VJlXEZWIUqBRkA",
+  authDomain: "recipebook-mr.firebaseapp.com",
+  projectId: "recipebook-mr",
+  storageBucket: "recipebook-mr.appspot.com",
+  messagingSenderId: "1089245404800",
+  appId: "1:1089245404800:web:2d6359edad2e66b1175065",
 };
 
 // Initialize Firebase app

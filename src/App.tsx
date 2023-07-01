@@ -27,26 +27,29 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import RegistrationScreen from "./pages/RegistrationScreen";
 import LoadingScreen from "./components/LoadingScreen";
+import { User } from "./models/User.model";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<firebase.User | null>(null); // State to track user authentication status
+  const [user, setUser] = useState<User | null>(null); // State to track user authentication status
   const [loading, setLoading] = useState(true);
 
-  const handleUserUpdate = (updatedUser: firebase.User | null) => {
+  console.log(typeof user);
+
+  const handleUserUpdate = (updatedUser: User | null) => {
     setUser(updatedUser);
   };
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((userAuth) => {
-      if (userAuth) {
-        // User is logged in
-        setUser(userAuth);
-      } else {
-        // User is not logged in
-        setUser(null);
-      }
+      // if (userAuth) {
+      //   // User is logged in
+      //   setUser(userAuth);
+      // } else {
+      //   // User is not logged in
+      //   setUser(null);
+      // }
       setTimeout(() => {
         setLoading(false);
       }, 1000);

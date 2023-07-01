@@ -6,20 +6,19 @@ import {
   IonItem,
   IonIcon,
   IonToast,
-  IonPage,
-  IonLoading,
 } from "@ionic/react";
 import ImageUpload from "../components/ImageUpload";
 import "./RegistrationScreen.css";
 import { mailOutline, lockClosedOutline, personOutline } from "ionicons/icons";
 import RegistrationNavbar from "../components/RegistrationNavBar";
-import { registerUser } from "../utillity/User.model";
 import { useHistory } from "react-router-dom";
 import firebase from "firebase/compat/app";
 import LoadingScreen from "../components/LoadingScreen";
+import { registerUser } from "../services/User.service";
+import { User } from "../models/User.model";
 
 interface RegistrationScreenProps {
-  handleUserUpdate: (updatedUser: firebase.User | null) => void;
+  handleUserUpdate: (updatedUser: User | null) => void;
 }
 
 const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
@@ -42,6 +41,8 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
     try {
       setLoading(true);
       const user = await registerUser(email, password, name, profileImage);
+      console.log(user);
+
       setLoading(false);
 
       setToastMessage("Registration successful!");

@@ -9,9 +9,10 @@ import {
   IonText,
   IonToolbar,
 } from "@ionic/react";
+import { User } from "../models/User.model";
 
 interface MainScreenNavBarProps {
-  user: firebase.User | null;
+  user: User | null;
 }
 
 const MainScreenNavBar: React.FC<MainScreenNavBarProps> = ({ user }) => {
