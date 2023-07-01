@@ -12,10 +12,10 @@ import "./RegistrationScreen.css";
 import { mailOutline, lockClosedOutline, personOutline } from "ionicons/icons";
 import RegistrationNavbar from "../components/RegistrationNavBar";
 import { useHistory } from "react-router-dom";
-import firebase from "firebase/compat/app";
 import LoadingScreen from "../components/LoadingScreen";
 import { registerUser } from "../services/User.service";
 import { User } from "../models/User.model";
+import { addTokenToLocalStorage } from "../utillity/localStorage";
 
 interface RegistrationScreenProps {
   handleUserUpdate: (updatedUser: User | null) => void;
@@ -41,7 +41,6 @@ const RegistrationScreen: React.FC<RegistrationScreenProps> = ({
     try {
       setLoading(true);
       const user = await registerUser(email, password, name, profileImage);
-      console.log(user);
 
       setLoading(false);
 

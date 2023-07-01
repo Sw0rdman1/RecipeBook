@@ -47,7 +47,6 @@ export const createRecipe = async (
 
     // Add the recipe to the "recipes" collection
     await recipeRef.set(recipe);
-
     console.log("Recipe created successfully:", recipe);
   } catch (error) {
     console.error("Error creating recipe:", error);

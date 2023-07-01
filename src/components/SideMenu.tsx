@@ -28,7 +28,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ handleLogout, user }) => {
             style={{ width: "120px", height: "120px" }}
           >
             <img
-              src={user?.photoURL || ""}
+              src={
+                user?.photoURL ||
+                "https://ionicframework.com/docs/img/demos/avatar.svg"
+              }
               alt="User Avatar"
               style={{ width: "100%", height: "100%" }}
             />

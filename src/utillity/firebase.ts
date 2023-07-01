@@ -26,3 +26,24 @@ export const firestore = firebase.firestore();
 
 // Firebase storage
 export const storage = firebase.storage();
+
+// export const getImage = functions.https.onRequest(async (req, res) => {
+//   try {
+//     const imageName = req.query.name as string; // Get the image name from the request query parameters
+//     const bucket = admin.storage().bucket();
+
+//     const file = bucket.file(imageName); // Get the file with the specified name from Firebase Storage
+
+//     const [fileExists] = await file.exists();
+//     if (!fileExists) {
+//       res.status(404).send("Image not found");
+//       return;
+//     }
+
+//     const stream = file.createReadStream();
+//     stream.pipe(res);
+//   } catch (error) {
+//     console.error("Error retrieving image:", error);
+//     res.status(500).send("Internal Server Error");
+//   }
+// });

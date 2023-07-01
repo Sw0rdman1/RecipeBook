@@ -8,11 +8,17 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { useHistory, Link } from "react-router-dom";
-import { auth } from "../utillity/firebase";
 import { mailOutline, lockClosedOutline } from "ionicons/icons";
 import "./LogInScreen.css";
+import { authenticate } from "../services/User.service";
+import { User } from "../models/User.model";
+import { addTokenToLocalStorage } from "../utillity/localStorage";
 
-const LogInScreen: React.FC = () => {
+interface LogInScreenProps {
+  handleUserUpdate: (updatedUser: User | null) => void;
+}
+
+const LogInScreen: React.FC<LogInScreenProps> = ({ handleUserUpdate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -23,7 +29,9 @@ const LogInScreen: React.FC = () => {
 
   const handleLogin = async () => {
     try {
-      await auth.signInWithEmailAndPassword(email, password);
+      const user = await authenticate(email, password);
+      if (!user) return;
+      handleUserUpdate(user);
       history.push("/main");
     } catch (error: any) {
       handleBadLogin(error);
@@ -31,6 +39,8 @@ const LogInScreen: React.FC = () => {
   };
 
   const handleBadLogin = (error: any) => {
+    console.log(error.response.data);
+
     if (error.code === "auth/user-not-found") {
       setToastMessage("User does not exist.");
     } else if (error.code === "auth/wrong-password") {
@@ -40,7 +50,7 @@ const LogInScreen: React.FC = () => {
         setShake(false);
       }, 500);
     } else {
-      setToastMessage("An error occurred. Please try again.");
+      setToastMessage("Error loging in. Please try again");
     }
     setShowToast(true);
   };

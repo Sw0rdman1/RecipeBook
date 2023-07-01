@@ -32,8 +32,10 @@ const MainScreenNavBar: React.FC<MainScreenNavBarProps> = ({ user }) => {
                 style={{ width: "35px", height: "35px" }}
               >
                 <img
-                  src={user?.photoURL || ""}
-                  alt="User Avatar"
+                  src={
+                    user?.photoURL ||
+                    "https://ionicframework.com/docs/img/demos/avatar.svg"
+                  }
                   style={{ width: "100%", height: "100%" }}
                 />
               </IonAvatar>

@@ -2,8 +2,6 @@ import { IonApp, setupIonicReact, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
-import { auth } from "./utillity/firebase";
-import firebase from "firebase/compat/app";
 import Login from "./pages/LogInScreen";
 import MainScreen from "./pages/MainScreen";
 
@@ -28,6 +26,9 @@ import "./theme/variables.css";
 import RegistrationScreen from "./pages/RegistrationScreen";
 import LoadingScreen from "./components/LoadingScreen";
 import { User } from "./models/User.model";
+import { getTokenFromLocalStorage } from "./utillity/localStorage";
+import { reauthenticate } from "./services/User.service";
+import LogInScreen from "./pages/LogInScreen";
 
 setupIonicReact();
 
@@ -35,27 +36,29 @@ const App: React.FC = () => {
   const [user, setUser] = useState<User | null>(null); // State to track user authentication status
   const [loading, setLoading] = useState(true);
 
-  console.log(typeof user);
-
   const handleUserUpdate = (updatedUser: User | null) => {
     setUser(updatedUser);
   };
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((userAuth) => {
-      // if (userAuth) {
-      //   // User is logged in
-      //   setUser(userAuth);
-      // } else {
-      //   // User is not logged in
-      //   setUser(null);
-      // }
-      setTimeout(() => {
-        setLoading(false);
-      }, 1000);
-    });
-
-    return () => unsubscribe();
+    const token = getTokenFromLocalStorage();
+    if (token) {
+      reauthenticate(token)
+        .then((authenticatedUser) => {
+          if (authenticatedUser) {
+            setUser(authenticatedUser);
+          } else {
+            setUser(null);
+          }
+        })
+        .catch((error) => {
+          console.error("Error reauthenticating:", error);
+          setUser(null);
+        });
+    }
+    setTimeout(() => {
+      setLoading(false);
+    }, 1000);
   }, []);
 
   if (loading) {
@@ -75,7 +78,9 @@ const App: React.FC = () => {
           ) : (
             // User is not logged in, show login and registration screens
             <>
-              <Route exact path="/login" component={Login} />
+              <Route exact path="/login">
+                <LogInScreen handleUserUpdate={handleUserUpdate} />
+              </Route>
               <Route exact path="/registration">
                 <RegistrationScreen handleUserUpdate={handleUserUpdate} />
               </Route>
