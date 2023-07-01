@@ -1,6 +1,6 @@
 import { IonApp, setupIonicReact, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter as Router, Redirect, Route } from "react-router-dom";
 import Login from "./pages/LogInScreen";
 import MainScreen from "./pages/MainScreen";
@@ -25,19 +25,20 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import RegistrationScreen from "./pages/RegistrationScreen";
 import LoadingScreen from "./components/LoadingScreen";
-import { User } from "./models/User.model";
+import { User, setCurrentUser } from "./models/User.model";
 import { getTokenFromLocalStorage } from "./utillity/localStorage";
 import { reauthenticate } from "./services/User.service";
 import LogInScreen from "./pages/LogInScreen";
+import { AppContext, AppProvider } from "./context/AppContext";
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null); // State to track user authentication status
+  const { user, updateUser } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
 
   const handleUserUpdate = (updatedUser: User | null) => {
-    setUser(updatedUser);
+    updateUser(updatedUser);
   };
 
   useEffect(() => {
@@ -46,14 +47,15 @@ const App: React.FC = () => {
       reauthenticate(token)
         .then((authenticatedUser) => {
           if (authenticatedUser) {
-            setUser(authenticatedUser);
+            updateUser(authenticatedUser);
+            setCurrentUser(authenticatedUser);
           } else {
-            setUser(null);
+            updateUser(null);
           }
         })
         .catch((error) => {
           console.error("Error reauthenticating:", error);
-          setUser(null);
+          updateUser(null);
         });
     }
     setTimeout(() => {

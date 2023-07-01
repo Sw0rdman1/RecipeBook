@@ -5,28 +5,28 @@ import {
   fetchMyRecipes,
   likeOrDislikeRecipe,
 } from "../../utillity/Recipe.model";
-import { getCurrentUser } from "../../utillity/User.model";
 import RecipeCard from "../../components/RecipeCard";
 import LoadingScreen from "../../components/LoadingScreen";
+import { User, getCurrentUser } from "../../models/User.model";
 
 const MyProfileScreen: React.FC = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>();
+  const [recipes, setRecipes] = useState<Recipe[]>([]);
   const currentUser = getCurrentUser();
 
-  useEffect(() => {
-    const fetchRecipes = async () => {
-      const fetchedRecipes = await fetchMyRecipes();
-      setTimeout(() => {
-        setRecipes(fetchedRecipes);
-      }, 250);
-    };
+  // useEffect(() => {
+  //   const fetchRecipes = async () => {
+  //     const fetchedRecipes = await fetchMyRecipes();
+  //     setTimeout(() => {
+  //       setRecipes(fetchedRecipes);
+  //     }, 250);
+  //   };
 
-    fetchRecipes();
-  });
+  //   fetchRecipes();
+  // });
 
-  if (!recipes) {
-    return <LoadingScreen />;
-  }
+  // if (!recipes) {
+  //   return <LoadingScreen />;
+  // }
 
   return (
     <IonContent>

@@ -1,4 +1,4 @@
-export class User {
+export class Recipe {
   constructor(
     public id: string,
     public email: string,
@@ -15,13 +15,3 @@ export class User {
     return this._token;
   }
 }
-
-let currentUser: User;
-
-export const getCurrentUser = (): User | null => {
-  return currentUser;
-};
-
-export const setCurrentUser = (user: User) => {
-  currentUser = user;
-};

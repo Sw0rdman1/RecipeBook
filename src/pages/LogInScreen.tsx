@@ -11,7 +11,7 @@ import { useHistory, Link } from "react-router-dom";
 import { mailOutline, lockClosedOutline } from "ionicons/icons";
 import "./LogInScreen.css";
 import { authenticate } from "../services/User.service";
-import { User } from "../models/User.model";
+import { User, setCurrentUser } from "../models/User.model";
 import { addTokenToLocalStorage } from "../utillity/localStorage";
 
 interface LogInScreenProps {
@@ -32,6 +32,7 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ handleUserUpdate }) => {
       const user = await authenticate(email, password);
       if (!user) return;
       handleUserUpdate(user);
+      setCurrentUser(user);
       history.push("/main");
     } catch (error: any) {
       handleBadLogin(error);
