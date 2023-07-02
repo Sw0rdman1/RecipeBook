@@ -9,19 +9,19 @@ import { generateImageNumber } from "../utillity/functions";
 // Create a new recipe with authentication
 export const createRecipe = async (
   recipeData: any,
-  user: User
+  user: User | null
 ): Promise<string> => {
   try {
     let newRecipe = {
       ...recipeData,
       createdAt: Date.now(),
-      creatorID: user.id,
-      creatorName: user.displayName,
+      creatorID: user?.id,
+      creatorName: user?.displayName,
     };
 
     let photoURL = "";
 
-    const authToken = user.token; // Replace with your authentication token retrieval logic
+    const authToken = user?.token; // Replace with your authentication token retrieval logic
 
     if (recipeData.photoURL) {
       const storageRef = firebase.storage().ref();
@@ -85,10 +85,10 @@ export const getAllRecipes = async (user: User | null): Promise<any[]> => {
 export const updateRecipe = async (
   recipeId: string,
   updates: any,
-  user: User
+  user: User | null
 ): Promise<void> => {
   try {
-    const authToken = user.token; // Replace with your authentication token retrieval logic
+    const authToken = user?.token; // Replace with your authentication token retrieval logic
     await axios.patch(
       `${BASE_URL}/recipes/${recipeId}.json?auth=${authToken}`,
       updates

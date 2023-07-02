@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { RouteComponentProps } from "react-router";
 import {
   IonContent,
   IonButton,
@@ -7,28 +8,35 @@ import {
   IonToast,
 } from "@ionic/react";
 import "./CreateRecipeScreen.css";
-import { getCurrentUser } from "../../utillity/User.model";
-import RecipeImageUpload from "../../components/RecipeImageUpload";
 import { useHistory } from "react-router";
 import { AppContext } from "../../context/AppContext";
-import { createRecipe } from "../../services/Recipe.service";
-import { Recipe } from "../../models/Recipe.model";
+import { getRecipeDetails, updateRecipe } from "../../services/Recipe.service";
 
-const CreateRecipeScreen: React.FC = () => {
-  const history = useHistory();
+interface MatchParams {
+  recipeId: string;
+}
+
+interface EditRecipeScreenProps extends RouteComponentProps<MatchParams> {}
+
+const EditRecipeScreen: React.FC<EditRecipeScreenProps> = ({ match }) => {
+  const { recipeId } = match.params;
   const { currentUser } = useContext(AppContext);
+  const history = useHistory();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [ingredients, setIngredients] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [photoURL, setPhotoURL] = useState<File | undefined>(undefined);
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("");
 
-  const handleCreateRecipe = async () => {
+  const handleCancel = () => {
+    history.goBack();
+  };
+
+  const handleEditRecipe = () => {
     if (!title || !description || !ingredients || !instructions) {
       setToastMessage("Please fill in all fields.");
       setShowToast(true);
@@ -36,35 +44,23 @@ const CreateRecipeScreen: React.FC = () => {
       return;
     }
 
-    if (!currentUser) {
-      return;
-    }
-
-    const newRecipe = {
+    const updatedRecipe = {
       title,
       description,
       ingredients,
       instructions,
-      photoURL,
     };
 
-    createRecipe(newRecipe, currentUser)
+    updateRecipe(recipeId, updatedRecipe, currentUser)
       .then((newRecipeId) => {
-        console.log(`New recipe created with ID: ${newRecipeId}`);
-        // Reset input fields
-        setTitle("");
-        setDescription("");
-        setIngredients("");
-        setInstructions("");
-
         // Show success toast
-        setToastMessage("Recipe created successfully.");
+        setToastMessage("Recipe edited successfully.");
         setShowToast(true);
         setToastColor("success");
-        history.push(`/main/home`);
+        history.goBack();
       })
       .catch((error) => {
-        console.error("Error creating recipe:", error);
+        console.error("Error editing recipe:", error);
 
         // Show error toast
         setToastMessage("An error occurred. Please try again later.");
@@ -73,10 +69,26 @@ const CreateRecipeScreen: React.FC = () => {
       });
   };
 
+  useEffect(() => {
+    const fetchRecipeDetails = async () => {
+      try {
+        const recipeDetails = await getRecipeDetails(recipeId, currentUser);
+        setTitle(recipeDetails.title);
+        setDescription(recipeDetails.description);
+        setIngredients(recipeDetails.ingredients);
+        setInstructions(recipeDetails.instructions);
+      } catch (error) {
+        console.error("Error fetching recipe details:", error);
+      }
+    };
+
+    fetchRecipeDetails();
+  }, [recipeId]);
+
   return (
     <IonContent>
       <div className="create-recipe-container">
-        <h1>Create New Recipe</h1>
+        <h1>Edit Recipe</h1>
         <IonInput
           label="Title"
           labelPlacement="stacked"
@@ -105,10 +117,25 @@ const CreateRecipeScreen: React.FC = () => {
           value={instructions}
           onIonInput={(e: any) => setInstructions(e.target.value)}
         />
-        <RecipeImageUpload setImageUpload={setPhotoURL} />
-        <IonButton expand="full" shape="round" onClick={handleCreateRecipe}>
-          Create Recipe
-        </IonButton>
+        <div className="buttons">
+          <IonButton
+            expand="full"
+            className="cancel-button"
+            shape="round"
+            onClick={handleEditRecipe}
+          >
+            Edit
+          </IonButton>
+          <IonButton
+            expand="full"
+            className="button"
+            shape="round"
+            color={"danger"}
+            onClick={handleCancel}
+          >
+            Cancel
+          </IonButton>
+        </div>
 
         <IonToast
           isOpen={showToast}
@@ -122,4 +149,4 @@ const CreateRecipeScreen: React.FC = () => {
   );
 };
 
-export default CreateRecipeScreen;
+export default EditRecipeScreen;

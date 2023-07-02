@@ -44,6 +44,10 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
     setToastColor(color);
   };
 
+  const editRecipeHandler = () => {
+    history.push(`/main/edit-recipe/${recipe?.id}`);
+  };
+
   const handleDeleteRecipe = async () => {
     console.log(recipe);
 
@@ -131,25 +135,34 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
           ))}
         </ol>
         <div className="buttons">
-          <IonButton
-            shape="round"
-            onClick={handleLikeClick}
-            className="like-button"
-            fill={isLiked ? "solid" : "outline"}
-          >
-            <span> {!isLiked ? "Like recipe" : "Dislike recipe"}</span>
-          </IonButton>
           {currentUser?.displayName === recipe.creatorName ? (
+            <>
+              <IonButton
+                shape="round"
+                onClick={editRecipeHandler}
+                className="delete-button"
+                color={"primary"}
+              >
+                Edit <IonIcon icon={trash} />
+              </IonButton>
+              <IonButton
+                shape="round"
+                onClick={showDeleteConfirmation}
+                className="delete-button"
+                color={"danger"}
+              >
+                Delete <IonIcon icon={trash} />
+              </IonButton>
+            </>
+          ) : (
             <IonButton
               shape="round"
-              onClick={showDeleteConfirmation}
-              className="delete-button"
-              color={"danger"}
+              onClick={handleLikeClick}
+              className="like-button"
+              fill={isLiked ? "solid" : "outline"}
             >
-              Delete <IonIcon icon={trash} />
+              <span> {!isLiked ? "Like recipe" : "Dislike recipe"}</span>
             </IonButton>
-          ) : (
-            <></>
           )}
         </div>
       </div>

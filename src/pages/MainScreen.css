@@ -166,7 +166,7 @@ ol li {
 }
 
 .buttons {
-  width: 90%;
+  width: 80%;
 }
 
 .delete-button {
@@ -175,4 +175,8 @@ ol li {
 
 .like-button {
   width: 50%;
+}
+
+.cancel-button {
+  width: 40%;
 }

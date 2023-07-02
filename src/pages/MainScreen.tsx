@@ -11,6 +11,7 @@ import "./MainScreen.css";
 import RecipeDetailsScreen from "./mainScreen/RecipeDetailsScreen";
 import { User } from "../models/User.model";
 import { deleteTokenFromLocalStorage } from "../utillity/localStorage";
+import EditRecipeScreen from "./mainScreen/EditRecipeScreen";
 
 interface MainScreenProps {
   handleUserUpdate: (updatedUser: User | null) => void;
@@ -55,6 +56,10 @@ const MainScreen: React.FC<MainScreenProps> = ({ handleUserUpdate, user }) => {
           <Route
             path="/main/recipe-details/:recipeId"
             component={RecipeDetailsScreen}
+          />
+          <Route
+            path="/main/edit-recipe/:recipeId"
+            component={EditRecipeScreen}
           />
           <Redirect from="/main" to="/main/home" exact />
         </IonRouterOutlet>
