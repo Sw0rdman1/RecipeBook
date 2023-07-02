@@ -103,8 +103,6 @@ export const deleteRecipe = async (
   recipeId: string,
   user: User | null
 ): Promise<void> => {
-  console.log(recipeId);
-
   try {
     const authToken = user?.token; // Replace with your authentication token retrieval logic
     await axios.delete(

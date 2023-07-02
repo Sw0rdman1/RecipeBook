@@ -1,9 +1,9 @@
 import { IonContent } from "@ionic/react";
 import React, { useContext, useEffect, useState } from "react";
-import { Recipe, likeOrDislikeRecipe } from "../../utillity/Recipe.model";
 import RecipeCard from "../../components/RecipeCard";
 import { getAllRecipes } from "../../services/Recipe.service";
 import { AppContext } from "../../context/AppContext";
+import { Recipe } from "../../models/Recipe.model";
 
 const LikedRecipesScreen: React.FC = () => {
   const { currentUser } = useContext(AppContext);
@@ -42,11 +42,7 @@ const LikedRecipesScreen: React.FC = () => {
           </div>
         ) : (
           likedRecipes.map((recipe) => (
-            <RecipeCard
-              recipe={recipe}
-              key={recipe.id}
-              likeOrDislikeRecipe={likeOrDislikeRecipe}
-            />
+            <RecipeCard recipe={recipe} key={recipe.id} />
           ))
         )}
       </div>

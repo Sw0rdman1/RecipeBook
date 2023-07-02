@@ -1,15 +1,10 @@
 import { IonAvatar, IonContent } from "@ionic/react";
 import React, { useContext, useEffect, useState } from "react";
-import {
-  Recipe,
-  fetchMyRecipes,
-  likeOrDislikeRecipe,
-} from "../../utillity/Recipe.model";
+
 import RecipeCard from "../../components/RecipeCard";
-import LoadingScreen from "../../components/LoadingScreen";
-import { User } from "../../models/User.model";
 import { AppContext } from "../../context/AppContext";
 import { getAllRecipes } from "../../services/Recipe.service";
+import { Recipe } from "../../models/Recipe.model";
 
 const MyProfileScreen: React.FC = () => {
   const [myRecipes, setMyRecipes] = useState<Recipe[]>([]);
@@ -64,13 +59,7 @@ const MyProfileScreen: React.FC = () => {
           </div>
         ) : (
           myRecipes.map((recipe) => {
-            return (
-              <RecipeCard
-                recipe={recipe}
-                likeOrDislikeRecipe={likeOrDislikeRecipe}
-                key={recipe.id}
-              />
-            );
+            return <RecipeCard recipe={recipe} key={recipe.id} />;
           })
         )}
       </div>

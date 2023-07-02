@@ -8,21 +8,17 @@ import {
   IonIcon,
 } from "@ionic/react";
 import { heart, heartOutline } from "ionicons/icons";
-import { Recipe } from "../utillity/Recipe.model";
 import "./RecipeCard.css";
 import { useHistory } from "react-router";
 import { toggleLike } from "../services/Like.service";
 import { AppContext } from "../context/AppContext";
+import { Recipe } from "../models/Recipe.model";
 
 interface RecipeCardProps {
   recipe: Recipe;
-  likeOrDislikeRecipe: (recipe: Recipe) => void;
 }
 
-const RecipeCard: React.FC<RecipeCardProps> = ({
-  recipe,
-  likeOrDislikeRecipe,
-}) => {
+const RecipeCard: React.FC<RecipeCardProps> = ({ recipe }) => {
   const [isLiked, setIsLiked] = useState(recipe.likedByUser);
   const history = useHistory();
   const { currentUser } = useContext(AppContext);

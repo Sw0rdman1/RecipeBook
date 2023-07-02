@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { likeOrDislikeRecipe } from "../../utillity/Recipe.model";
 import RecipeCard from "../../components/RecipeCard";
 import { IonContent } from "@ionic/react";
 import LoadingScreen from "../../components/LoadingScreen";
@@ -15,7 +14,7 @@ const HomeScreen: React.FC = () => {
         .then((recipes) => {
           setTimeout(() => {
             updateRecipes(recipes);
-          }, 250);
+          }, 500);
         })
         .catch((error) => {
           console.error("Error retrieving recipes:", error);
@@ -33,11 +32,7 @@ const HomeScreen: React.FC = () => {
     <IonContent>
       <div className="home-screen">
         {recipes.map((recipe) => (
-          <RecipeCard
-            recipe={recipe}
-            key={recipe.id}
-            likeOrDislikeRecipe={likeOrDislikeRecipe}
-          />
+          <RecipeCard recipe={recipe} key={recipe.id} />
         ))}
       </div>
     </IonContent>

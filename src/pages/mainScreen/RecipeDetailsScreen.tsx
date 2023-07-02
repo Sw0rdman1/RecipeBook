@@ -49,8 +49,6 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
   };
 
   const handleDeleteRecipe = async () => {
-    console.log(recipe);
-
     try {
       if (!recipe) return;
       await deleteRecipe(recipe.id, currentUser);
