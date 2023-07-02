@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   IonContent,
   IonButton,
@@ -7,13 +7,16 @@ import {
   IonToast,
 } from "@ionic/react";
 import "./CreateRecipeScreen.css";
-import { createRecipe } from "../../utillity/Recipe.model";
 import { getCurrentUser } from "../../utillity/User.model";
 import RecipeImageUpload from "../../components/RecipeImageUpload";
 import { useHistory } from "react-router";
+import { AppContext } from "../../context/AppContext";
+import { createRecipe } from "../../services/Recipe.service";
+import { Recipe } from "../../models/Recipe.model";
 
 const CreateRecipeScreen: React.FC = () => {
   const history = useHistory();
+  const { currentUser, recipes, updateRecipes } = useContext(AppContext);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -33,41 +36,41 @@ const CreateRecipeScreen: React.FC = () => {
       return;
     }
 
-    const user = getCurrentUser();
-
-    if (!user) {
+    if (!currentUser) {
       return;
     }
 
-    try {
-      await createRecipe(
-        title,
-        description,
-        ingredients,
-        instructions,
-        photoURL,
-        user
-      );
+    const newRecipe = {
+      title,
+      description,
+      ingredients,
+      instructions,
+      photoURL,
+    };
 
-      // Reset input fields
-      setTitle("");
-      setDescription("");
-      setIngredients("");
-      setInstructions("");
+    createRecipe(newRecipe, currentUser)
+      .then((newRecipeId) => {
+        console.log(`New recipe created with ID: ${newRecipeId}`);
+        // Reset input fields
+        setTitle("");
+        setDescription("");
+        setIngredients("");
+        setInstructions("");
 
-      // Show success toast
-      setToastMessage("Recipe created successfully.");
-      setShowToast(true);
-      setToastColor("success");
-      history.push(`/main/home`);
-    } catch (error) {
-      console.error("Error creating recipe:", error);
+        // Show success toast
+        setToastMessage("Recipe created successfully.");
+        setShowToast(true);
+        setToastColor("success");
+        history.push(`/main/home`);
+      })
+      .catch((error) => {
+        console.error("Error creating recipe:", error);
 
-      // Show error toast
-      setToastMessage("An error occurred. Please try again later.");
-      setShowToast(true);
-      setToastColor("danger");
-    }
+        // Show error toast
+        setToastMessage("An error occurred. Please try again later.");
+        setShowToast(true);
+        setToastColor("danger"); // Handle error, e.g., display an error message to the user
+      });
   };
 
   return (

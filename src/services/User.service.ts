@@ -93,7 +93,7 @@ export const reauthenticate = async (
     const userResponse = await getUserInfo(response.id_token);
 
     const expirationTime = new Date(
-      new Date().getTime() + Number(response.expiresIn) * 1000
+      new Date().getTime() + Number(response.expires_in) * 1000
     );
 
     const user = new User(
@@ -101,7 +101,7 @@ export const reauthenticate = async (
       userResponse.email,
       userResponse.displayName,
       userResponse.providerUserInfo[0].photoUrl,
-      userResponse.idToken,
+      response.id_token,
       expirationTime
     );
     return user;

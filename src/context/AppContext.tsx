@@ -4,9 +4,9 @@ import { User } from "../models/User.model";
 
 // Define the type for the app context
 interface AppContextType {
-  user: User | null;
+  currentUser: User | null;
   recipes: Recipe[];
-  updateUser: (user: User | null) => void;
+  updateCurrentUser: (user: User | null) => void;
   updateRecipes: (recipes: Recipe[]) => void;
 }
 
@@ -16,20 +16,20 @@ export interface AppProviderProps {
 
 // Create the app context
 export const AppContext = createContext<AppContextType>({
-  user: null,
+  currentUser: null,
   recipes: [],
-  updateUser: () => {},
+  updateCurrentUser: () => {},
   updateRecipes: () => {},
 });
 
 // Create the AppProvider component
 export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [recipes, setRecipes] = useState<Recipe[]>([]);
 
   // Function to update the user
-  const updateUser = (user: User | null) => {
-    setUser(user);
+  const updateCurrentUser = (user: User | null) => {
+    setCurrentUser(user);
   };
 
   // Function to update the recipes
@@ -46,7 +46,9 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   }, []);
 
   return (
-    <AppContext.Provider value={{ user, recipes, updateUser, updateRecipes }}>
+    <AppContext.Provider
+      value={{ currentUser, recipes, updateCurrentUser, updateRecipes }}
+    >
       {children}
     </AppContext.Provider>
   );

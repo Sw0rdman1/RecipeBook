@@ -1,5 +1,5 @@
 import { IonAvatar, IonContent } from "@ionic/react";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   Recipe,
   fetchMyRecipes,
@@ -7,11 +7,12 @@ import {
 } from "../../utillity/Recipe.model";
 import RecipeCard from "../../components/RecipeCard";
 import LoadingScreen from "../../components/LoadingScreen";
-import { User, getCurrentUser } from "../../models/User.model";
+import { User } from "../../models/User.model";
+import { AppContext } from "../../context/AppContext";
 
 const MyProfileScreen: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const currentUser = getCurrentUser();
+  const { currentUser } = useContext(AppContext);
 
   // useEffect(() => {
   //   const fetchRecipes = async () => {
@@ -33,7 +34,10 @@ const MyProfileScreen: React.FC = () => {
       <div className="my-prfoile-section">
         <IonAvatar slot="icon-only" style={{ width: "90px", height: "90px" }}>
           <img
-            src={currentUser?.photoURL || ""}
+            src={
+              currentUser?.photoURL ||
+              "https://ionicframework.com/docs/img/demos/avatar.svg"
+            }
             alt="User Avatar"
             style={{ width: "100%", height: "100%" }}
           />

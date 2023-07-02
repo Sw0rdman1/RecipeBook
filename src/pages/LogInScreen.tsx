@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   IonContent,
   IonInput,
@@ -11,14 +11,17 @@ import { useHistory, Link } from "react-router-dom";
 import { mailOutline, lockClosedOutline } from "ionicons/icons";
 import "./LogInScreen.css";
 import { authenticate } from "../services/User.service";
-import { User, setCurrentUser } from "../models/User.model";
 import { addTokenToLocalStorage } from "../utillity/localStorage";
+import { User } from "../models/User.model";
+import { AppContext } from "../context/AppContext";
 
 interface LogInScreenProps {
   handleUserUpdate: (updatedUser: User | null) => void;
 }
 
 const LogInScreen: React.FC<LogInScreenProps> = ({ handleUserUpdate }) => {
+  const { updateCurrentUser } = useContext(AppContext);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showToast, setShowToast] = useState(false);
@@ -32,7 +35,7 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ handleUserUpdate }) => {
       const user = await authenticate(email, password);
       if (!user) return;
       handleUserUpdate(user);
-      setCurrentUser(user);
+      updateCurrentUser(user);
       history.push("/main");
     } catch (error: any) {
       handleBadLogin(error);

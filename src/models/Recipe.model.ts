@@ -1,17 +1,14 @@
 export class Recipe {
   constructor(
     public id: string,
-    public email: string,
-    public displayName: string,
+    public title: string,
+    public description: string,
+    public ingredients: string,
+    public instructions: string,
     public photoURL: string,
-    private _token: string,
-    private tokenExpirationDate: Date
+    public likes: number,
+    public likedByUser: boolean,
+    public creatorID: string,
+    public creatorName: string
   ) {}
-
-  get token() {
-    if (!this.tokenExpirationDate || this.tokenExpirationDate <= new Date()) {
-      return null;
-    }
-    return this._token;
-  }
 }

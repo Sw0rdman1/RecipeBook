@@ -25,7 +25,7 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import RegistrationScreen from "./pages/RegistrationScreen";
 import LoadingScreen from "./components/LoadingScreen";
-import { User, setCurrentUser } from "./models/User.model";
+import { User } from "./models/User.model";
 import { getTokenFromLocalStorage } from "./utillity/localStorage";
 import { reauthenticate } from "./services/User.service";
 import LogInScreen from "./pages/LogInScreen";
@@ -34,11 +34,11 @@ import { AppContext, AppProvider } from "./context/AppContext";
 setupIonicReact();
 
 const App: React.FC = () => {
-  const { user, updateUser } = useContext(AppContext);
+  const { currentUser, updateCurrentUser } = useContext(AppContext);
   const [loading, setLoading] = useState(true);
 
   const handleUserUpdate = (updatedUser: User | null) => {
-    updateUser(updatedUser);
+    updateCurrentUser(updatedUser);
   };
 
   useEffect(() => {
@@ -47,15 +47,14 @@ const App: React.FC = () => {
       reauthenticate(token)
         .then((authenticatedUser) => {
           if (authenticatedUser) {
-            updateUser(authenticatedUser);
-            setCurrentUser(authenticatedUser);
+            updateCurrentUser(authenticatedUser);
           } else {
-            updateUser(null);
+            updateCurrentUser(null);
           }
         })
         .catch((error) => {
           console.error("Error reauthenticating:", error);
-          updateUser(null);
+          updateCurrentUser(null);
         });
     }
     setTimeout(() => {
@@ -71,10 +70,13 @@ const App: React.FC = () => {
     <IonApp>
       <IonReactRouter>
         <IonRouterOutlet>
-          {user ? (
+          {currentUser ? (
             // User is logged in, show main screen
             <>
-              <MainScreen handleUserUpdate={handleUserUpdate} user={user} />
+              <MainScreen
+                handleUserUpdate={handleUserUpdate}
+                user={currentUser}
+              />
               <Redirect to="/main" />
             </>
           ) : (
