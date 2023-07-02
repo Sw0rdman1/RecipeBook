@@ -47,3 +47,5 @@ export const storage = firebase.storage();
 //     res.status(500).send("Internal Server Error");
 //   }
 // });
+
+export const BASE_URL = `https://recipebook-mr-default-rtdb.europe-west1.firebasedatabase.app`;

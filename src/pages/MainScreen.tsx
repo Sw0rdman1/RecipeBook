@@ -1,8 +1,6 @@
 import React from "react";
 import { IonContent, IonPage, IonRouterOutlet } from "@ionic/react";
-import { auth } from "../utillity/firebase";
-import firebase from "firebase/compat/app";
-import { Redirect, Route, useHistory, useRouteMatch } from "react-router";
+import { Redirect, Route, useHistory } from "react-router";
 import SideMenu from "../components/SideMenu";
 import NavBar from "../components/MainScreenNavBar";
 import HomeScreen from "./mainScreen/HomeScreen";
@@ -12,6 +10,7 @@ import ProfileScreen from "./mainScreen/MyProfileScreen";
 import "./MainScreen.css";
 import RecipeDetailsScreen from "./mainScreen/RecipeDetailsScreen";
 import { User } from "../models/User.model";
+import { deleteTokenFromLocalStorage } from "../utillity/localStorage";
 
 interface MainScreenProps {
   handleUserUpdate: (updatedUser: User | null) => void;
@@ -21,10 +20,10 @@ interface MainScreenProps {
 const MainScreen: React.FC<MainScreenProps> = ({ handleUserUpdate, user }) => {
   const history = useHistory();
 
-  const handleLogout = async () => {
+  const handleLogout = () => {
     try {
-      await auth.signOut();
       handleUserUpdate(null);
+      deleteTokenFromLocalStorage();
       history.push("/login");
     } catch (error) {
       console.error("Error logging out:", error);

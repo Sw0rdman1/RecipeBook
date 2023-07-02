@@ -1,8 +1,8 @@
 import axios from "axios";
 import { User } from "../models/User.model";
 import { Recipe } from "../models/Recipe.model";
-
-const BASE_URL = `https://recipebook-mr-default-rtdb.europe-west1.firebasedatabase.app/recipes`;
+import { getNumberOfLikes, likedByUser } from "./Like.service";
+import { BASE_URL } from "../utillity/firebase";
 
 // Create a new recipe with authentication
 export const createRecipe = async (
@@ -12,10 +12,16 @@ export const createRecipe = async (
   try {
     console.log(user);
 
+    const newRecipe = {
+      ...recipeData,
+      creatorID: user.id,
+      creatorName: user.displayName,
+    };
+
     const authToken = user.token; // Replace with your authentication token retrieval logic
     const response = await axios.post(
-      `${BASE_URL}.json?auth=${authToken}`,
-      recipeData
+      `${BASE_URL}/recipes.json?auth=${authToken}`,
+      newRecipe
     );
     return response.data.name;
   } catch (error) {
@@ -27,17 +33,27 @@ export const createRecipe = async (
 export const getAllRecipes = async (user: User | null): Promise<any[]> => {
   try {
     const authToken = user?.token; // Replace with your authentication token retrieval logic
-    const response = await axios.get(`${BASE_URL}.json?auth=${authToken}`);
+    const response = await axios.get(
+      `${BASE_URL}/recipes.json?auth=${authToken}`
+    );
     const data = response.data;
 
     if (data) {
-      const recipes: Recipe[] = Object.keys(data).map((key) => {
-        return {
-          id: key,
-          ...data[key],
-        };
-      });
+      const recipePromises: Promise<Recipe>[] = Object.keys(data).map(
+        async (key) => {
+          const isLiked = await likedByUser(user, key); // Call likedByUser function
+          const numberOfLikes = await getNumberOfLikes(user, key);
 
+          return {
+            id: key,
+            likedByUser: isLiked,
+            likes: numberOfLikes,
+            ...data[key],
+          } as Recipe;
+        }
+      );
+
+      const recipes = await Promise.all(recipePromises);
       return recipes;
     } else {
       return [];
@@ -56,7 +72,7 @@ export const updateRecipe = async (
   try {
     const authToken = user.token; // Replace with your authentication token retrieval logic
     await axios.patch(
-      `${BASE_URL}/${recipeId}.json?auth=${authToken}`,
+      `${BASE_URL}/recipes/${recipeId}.json?auth=${authToken}`,
       updates
     );
   } catch (error) {
@@ -71,7 +87,9 @@ export const deleteRecipe = async (
 ): Promise<void> => {
   try {
     const authToken = user.token; // Replace with your authentication token retrieval logic
-    await axios.delete(`${BASE_URL}/${recipeId}.json?auth=${authToken}`);
+    await axios.delete(
+      `${BASE_URL}/recipes/${recipeId}.json?auth=${authToken}`
+    );
   } catch (error) {
     throw error;
   }

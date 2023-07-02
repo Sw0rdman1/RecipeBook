@@ -1,30 +1,30 @@
 import { IonContent } from "@ionic/react";
-import React, { useEffect, useState } from "react";
-import {
-  Recipe,
-  fetchLikedRecipes,
-  likeOrDislikeRecipe,
-} from "../../utillity/Recipe.model";
+import React, { useContext, useEffect, useState } from "react";
+import { Recipe, likeOrDislikeRecipe } from "../../utillity/Recipe.model";
 import RecipeCard from "../../components/RecipeCard";
-import LoadingScreen from "../../components/LoadingScreen";
+import { getAllRecipes } from "../../services/Recipe.service";
+import { AppContext } from "../../context/AppContext";
 
 const LikedRecipesScreen: React.FC = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>();
+  const { currentUser } = useContext(AppContext);
+  const [likedRecipes, setLikedRecipes] = useState<Recipe[]>([]);
 
   useEffect(() => {
-    const fetchRecipes = async () => {
-      const fetchedRecipes = await fetchLikedRecipes();
-      setTimeout(() => {
-        setRecipes(fetchedRecipes);
-      }, 250);
+    const fetchLikedRecipes = async () => {
+      getAllRecipes(currentUser)
+        .then((recipes) => {
+          const likedRecipes = recipes.filter(
+            (recipe: Recipe) => recipe.likedByUser
+          );
+          setLikedRecipes(likedRecipes);
+        })
+        .catch((error) => {
+          console.error("Error retrieving recipes:", error);
+        });
     };
 
-    fetchRecipes();
+    fetchLikedRecipes();
   }, []);
-
-  if (!recipes) {
-    return <LoadingScreen />;
-  }
 
   return (
     <IonContent>
@@ -32,16 +32,16 @@ const LikedRecipesScreen: React.FC = () => {
         <div className="liked-recipes-header">
           <span>Liked recipes</span>
           <span>
-            <b>{recipes.length} total</b>
+            <b>{likedRecipes.length} total</b>
           </span>
         </div>
-        {recipes.length === 0 ? (
+        {likedRecipes.length === 0 ? (
           <div style={{ textAlign: "center" }}>
             You didn't like any recipe.
             <br /> Go to Home screen
           </div>
         ) : (
-          recipes.map((recipe) => (
+          likedRecipes.map((recipe) => (
             <RecipeCard
               recipe={recipe}
               key={recipe.id}

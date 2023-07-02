@@ -4,8 +4,6 @@ import {
   IonButton,
   IonContent,
   IonIcon,
-  IonPage,
-  IonText,
   IonToast,
 } from "@ionic/react";
 import { RouteComponentProps, useHistory } from "react-router";
@@ -16,7 +14,6 @@ import {
   likeOrDislikeRecipe,
 } from "../../utillity/Recipe.model";
 import LoadingScreen from "../../components/LoadingScreen";
-import { heart, heartOutline } from "ionicons/icons";
 import { trash } from "ionicons/icons";
 import { getCurrentUser } from "../../utillity/User.model";
 import RecipeDeatilsNavbar from "./RecipeDeatilsNavbar";

@@ -25,7 +25,7 @@ const HomeScreen: React.FC = () => {
     fetchRecipes();
   }, []);
 
-  if (!recipes) {
+  if (recipes.length === 0) {
     return <LoadingScreen />;
   }
 

@@ -8,7 +8,6 @@ import {
   IonLabel,
   IonMenuToggle,
 } from "@ionic/react";
-import firebase from "firebase/compat/app";
 import "./SideMenu.css";
 import { User } from "../models/User.model";
 

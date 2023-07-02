@@ -9,25 +9,29 @@ import RecipeCard from "../../components/RecipeCard";
 import LoadingScreen from "../../components/LoadingScreen";
 import { User } from "../../models/User.model";
 import { AppContext } from "../../context/AppContext";
+import { getAllRecipes } from "../../services/Recipe.service";
 
 const MyProfileScreen: React.FC = () => {
-  const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [myRecipes, setMyRecipes] = useState<Recipe[]>([]);
   const { currentUser } = useContext(AppContext);
 
-  // useEffect(() => {
-  //   const fetchRecipes = async () => {
-  //     const fetchedRecipes = await fetchMyRecipes();
-  //     setTimeout(() => {
-  //       setRecipes(fetchedRecipes);
-  //     }, 250);
-  //   };
+  useEffect(() => {
+    const fetchLikedRecipes = async () => {
+      getAllRecipes(currentUser)
+        .then((recipes) => {
+          const recipeList = recipes.filter(
+            (recipe: Recipe) => recipe.creatorID === currentUser?.id
+          );
 
-  //   fetchRecipes();
-  // });
+          setMyRecipes(recipeList);
+        })
+        .catch((error) => {
+          console.error("Error retrieving recipes:", error);
+        });
+    };
 
-  // if (!recipes) {
-  //   return <LoadingScreen />;
-  // }
+    fetchLikedRecipes();
+  }, []);
 
   return (
     <IonContent>
@@ -49,17 +53,17 @@ const MyProfileScreen: React.FC = () => {
       </div>
       <div className="my-recipe-section">
         <div className="my-recipe-header">
-          <h4>My Recipes</h4> {recipes.length} total
+          <h4>My Recipes</h4> {myRecipes.length} total
         </div>
       </div>
       <div className="my-profile-screen">
-        {recipes.length === 0 ? (
+        {myRecipes.length === 0 ? (
           <div style={{ textAlign: "center" }}>
-            You didn't like any recipe.
-            <br /> Go to Home screen
+            You didn't create any recipe.
+            <br /> Go to Create New Recipe
           </div>
         ) : (
-          recipes.map((recipe) => {
+          myRecipes.map((recipe) => {
             return (
               <RecipeCard
                 recipe={recipe}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   IonCard,
   IonCardHeader,
@@ -11,6 +11,8 @@ import { heart, heartOutline } from "ionicons/icons";
 import { Recipe } from "../utillity/Recipe.model";
 import "./RecipeCard.css";
 import { useHistory } from "react-router";
+import { toggleLike } from "../services/Like.service";
+import { AppContext } from "../context/AppContext";
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -23,6 +25,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
 }) => {
   const [isLiked, setIsLiked] = useState(recipe.likedByUser);
   const history = useHistory();
+  const { currentUser } = useContext(AppContext);
 
   const handleLikeClick = (
     e: React.MouseEvent<HTMLIonButtonElement, MouseEvent>
@@ -32,7 +35,7 @@ const RecipeCard: React.FC<RecipeCardProps> = ({
     setIsLiked(!isLiked);
     isLiked ? recipe.likes-- : recipe.likes++;
 
-    likeOrDislikeRecipe(recipe);
+    toggleLike(currentUser, recipe.id);
     recipe.likedByUser = !recipe.likedByUser;
   };
 
