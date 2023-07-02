@@ -1,8 +1,10 @@
 import axios from "axios";
+import firebase from "firebase/compat/app";
 import { User } from "../models/User.model";
 import { Recipe } from "../models/Recipe.model";
 import { getNumberOfLikes, likedByUser } from "./Like.service";
 import { BASE_URL } from "../utillity/firebase";
+import { generateImageNumber } from "../utillity/functions";
 
 // Create a new recipe with authentication
 export const createRecipe = async (
@@ -10,15 +12,31 @@ export const createRecipe = async (
   user: User
 ): Promise<string> => {
   try {
-    console.log(user);
-
-    const newRecipe = {
+    let newRecipe = {
       ...recipeData,
+      createdAt: Date.now(),
       creatorID: user.id,
       creatorName: user.displayName,
     };
 
+    let photoURL = "";
+
     const authToken = user.token; // Replace with your authentication token retrieval logic
+
+    if (recipeData.photoURL) {
+      const storageRef = firebase.storage().ref();
+      const profilePictureRef = storageRef.child(
+        `recipePictures/${generateImageNumber()}`
+      );
+      await profilePictureRef.put(recipeData.photoURL);
+
+      photoURL = await profilePictureRef.getDownloadURL();
+
+      newRecipe = {
+        ...newRecipe,
+        photoURL,
+      };
+    }
     const response = await axios.post(
       `${BASE_URL}/recipes.json?auth=${authToken}`,
       newRecipe
@@ -34,7 +52,7 @@ export const getAllRecipes = async (user: User | null): Promise<any[]> => {
   try {
     const authToken = user?.token; // Replace with your authentication token retrieval logic
     const response = await axios.get(
-      `${BASE_URL}/recipes.json?auth=${authToken}`
+      `${BASE_URL}/recipes.json?orderBy="createdAt"&auth=${authToken}`
     );
     const data = response.data;
 
@@ -54,7 +72,7 @@ export const getAllRecipes = async (user: User | null): Promise<any[]> => {
       );
 
       const recipes = await Promise.all(recipePromises);
-      return recipes;
+      return recipes.reverse();
     } else {
       return [];
     }
