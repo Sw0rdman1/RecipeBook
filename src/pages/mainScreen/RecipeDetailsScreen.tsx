@@ -135,7 +135,7 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
           ))}
         </ol>
         <div className="buttons">
-          {currentUser?.displayName === recipe.creatorName ? (
+          {currentUser?.id === recipe.creatorID ? (
             <>
               <IonButton
                 shape="round"
