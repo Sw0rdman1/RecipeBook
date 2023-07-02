@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   IonAlert,
   IonButton,
@@ -7,16 +7,14 @@ import {
   IonToast,
 } from "@ionic/react";
 import { RouteComponentProps, useHistory } from "react-router";
-import {
-  Recipe,
-  deleteRecipe,
-  getRecipeDetails,
-  likeOrDislikeRecipe,
-} from "../../utillity/Recipe.model";
+
 import LoadingScreen from "../../components/LoadingScreen";
 import { trash } from "ionicons/icons";
-import { getCurrentUser } from "../../utillity/User.model";
 import RecipeDeatilsNavbar from "./RecipeDeatilsNavbar";
+import { deleteRecipe, getRecipeDetails } from "../../services/Recipe.service";
+import { AppContext } from "../../context/AppContext";
+import { Recipe } from "../../models/Recipe.model";
+import { toggleLike } from "../../services/Like.service";
 
 interface MatchParams {
   recipeId: string;
@@ -27,6 +25,7 @@ interface RecipeDetailScreenProps extends RouteComponentProps<MatchParams> {}
 const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
   const { recipeId } = match.params;
   const history = useHistory();
+  const { currentUser } = useContext(AppContext);
 
   const [recipe, setRecipe] = useState<Recipe | null>(null);
   const [isLiked, setIsLiked] = useState<boolean | undefined>(false);
@@ -34,8 +33,6 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
   const [toastMessage, setToastMessage] = useState("");
   const [toastColor, setToastColor] = useState("");
   const [showConfirmation, setShowConfirmation] = useState(false);
-
-  const currentUser = getCurrentUser();
 
   const showDeleteConfirmation = () => {
     setShowConfirmation(true);
@@ -48,9 +45,11 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
   };
 
   const handleDeleteRecipe = async () => {
+    console.log(recipe);
+
     try {
       if (!recipe) return;
-      await deleteRecipe(recipe.id);
+      await deleteRecipe(recipe.id, currentUser);
       showToastNotification("Recipe deleted successfully", "success");
       history.push(`/main/home`);
     } catch (error) {
@@ -63,7 +62,7 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
       setIsLiked(!isLiked);
 
       isLiked ? recipe.likes-- : recipe.likes++;
-      likeOrDislikeRecipe(recipe);
+      toggleLike(currentUser, recipe.id);
       recipe.likedByUser = !recipe.likedByUser;
     }
   };
@@ -71,10 +70,9 @@ const RecipeDetailsScreen: React.FC<RecipeDetailScreenProps> = ({ match }) => {
   useEffect(() => {
     const fetchRecipeDetails = async () => {
       try {
-        const recipeDetails = await getRecipeDetails(recipeId);
+        const recipeDetails = await getRecipeDetails(recipeId, currentUser);
         setTimeout(() => {
           setRecipe(recipeDetails);
-
           setIsLiked(recipeDetails?.likedByUser);
         }, 250);
       } catch (error) {

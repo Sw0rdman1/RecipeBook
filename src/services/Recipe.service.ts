@@ -83,14 +83,38 @@ export const updateRecipe = async (
 // Delete a recipe with authentication
 export const deleteRecipe = async (
   recipeId: string,
-  user: User
+  user: User | null
 ): Promise<void> => {
+  console.log(recipeId);
+
   try {
-    const authToken = user.token; // Replace with your authentication token retrieval logic
+    const authToken = user?.token; // Replace with your authentication token retrieval logic
     await axios.delete(
       `${BASE_URL}/recipes/${recipeId}.json?auth=${authToken}`
     );
   } catch (error) {
+    throw error;
+  }
+};
+
+export const getRecipeDetails = async (recipeId: string, user: User | null) => {
+  try {
+    const authToken = user?.token;
+    const response = await axios.get(
+      `${BASE_URL}/recipes/${recipeId}.json?auth=${authToken}`
+    );
+    const isLiked = await likedByUser(user, recipeId);
+    const numberOfLikes = await getNumberOfLikes(user, recipeId);
+
+    const recipeDetails = response.data;
+    return {
+      id: recipeId,
+      likedByUser: isLiked,
+      likes: numberOfLikes,
+      ...recipeDetails,
+    } as Recipe;
+  } catch (error) {
+    console.error("Error getting recipe details:", error);
     throw error;
   }
 };
