@@ -43,16 +43,21 @@ const LogInScreen: React.FC<LogInScreenProps> = ({ handleUserUpdate }) => {
   };
 
   const handleBadLogin = (error: any) => {
-    console.log(error.response.data);
+    const message = error?.response.data.error.message;
 
-    if (error.code === "auth/user-not-found") {
+    if (message === "EMAIL_NOT_FOUND") {
       setToastMessage("User does not exist.");
-    } else if (error.code === "auth/wrong-password") {
+    } else if (message === "INVALID_PASSWORD") {
       setToastMessage("Incorrect password.");
       setShake(true);
       setTimeout(() => {
         setShake(false);
       }, 500);
+    } else if (
+      message ===
+      "TOO_MANY_ATTEMPTS_TRY_LATER : Access to this account has been temporarily disabled due to many failed login attempts. You can immediately restore it by resetting your password or you can try again later."
+    ) {
+      setToastMessage("Too many attempts. Please try again later");
     } else {
       setToastMessage("Error loging in. Please try again");
     }
