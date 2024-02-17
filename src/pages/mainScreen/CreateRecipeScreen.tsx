@@ -7,7 +7,6 @@ import {
   IonToast,
 } from "@ionic/react";
 import "./CreateRecipeScreen.css";
-import { getCurrentUser } from "../../utillity/User.model";
 import RecipeImageUpload from "../../components/RecipeImageUpload";
 import { useHistory } from "react-router";
 import { AppContext } from "../../context/AppContext";
